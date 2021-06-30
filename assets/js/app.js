@@ -16,6 +16,7 @@ function taskFormHandler(event) {
     type: taskTypeInput
   }
   createTaskElement(taskDataObject);
+  formElement.reset();
   }; 
   function createTaskElement(taskDataObject){
     // create a li element for the unordered list

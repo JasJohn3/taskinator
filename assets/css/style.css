@@ -12,7 +12,7 @@
 
 body {
   background: var(--secondary);
-  color: var(--grey);
+  color: var(--secondary);
   margin: 0;
   padding: 0;
   display: flex;
@@ -204,15 +204,15 @@ footer {
 
 .select-dropdown:hover,
 .select-status:hover {
-  border-color: #888;
+  border-color: var(--primary);
 }
 
 .select-dropdown:focus,
 .select-status:focus {
-  border-color: #aaa;
-  box-shadow: 0 0 1px 3px rgba(59, 153, 252, 0.7);
+  border-color: var(--secondary);
+  box-shadow: 0 0 1px 3px var(--primary);
   box-shadow: 0 0 0 3px -moz-mac-focusring;
-  color: #222;
+  color: var(--secondary);
   outline: none;
 }
 .select-dropdown option,
