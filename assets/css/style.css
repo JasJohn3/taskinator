@@ -11,7 +11,7 @@
 }
 
 body {
-  background: #fff;
+  background: var(--secondary);
   color: var(--grey);
   margin: 0;
   padding: 0;
@@ -50,7 +50,7 @@ form input {
   padding: 12px;
   width: 100%;
   font-size: 2.2rem;
-  border: 2px solid var(--grey);
+  border: 2px solid var(--primary);
   border-radius: 12px;
 }
 
@@ -90,7 +90,12 @@ footer {
 }
 
 .list-title {
-  color: var(--secondary);
+  color: var(--primary);
+  background-color: #000;
+  border-radius: 10px;
+  border: 2px solid var(--primary);
+  padding: 5px;
+  text-align: center;
   font-size: 2.6rem;
 }
 
@@ -100,7 +105,7 @@ footer {
   height: calc(100% - 50px);
   background: var(--tertiary);
   border-radius: 12px;
-  border: 2px solid var(--grey);
+  border: 2px solid var(--primary);
 }
 
 .task-item {
@@ -174,7 +179,7 @@ footer {
   width: 100%;
   max-width: 100%;
   margin: 0;
-  border: 2px solid var(--grey);
+  border: 2px solid var(--primary);
   border-radius: 12px;
   -moz-appearance: none;
   -webkit-appearance: none;
