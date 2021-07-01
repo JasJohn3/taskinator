@@ -1,10 +1,12 @@
 var formElement = document.querySelector('#task-form');
 var tasksToDoElement = document.querySelector("#tasks-to-do");
 var pageContentEl = document.querySelector("#page-content");
+var tasksInProgressEl = document.querySelector("#tasks-in-progress");
+var tasksCompletedEl = document.querySelector("#tasks-completed");
 var taskIdCounter = 0;
 
-
-
+  //__________________________________________ Create Task Event Handler __________________________________________
+  // Function dedicated to the creation of a new task and ecapsulates user generated data
 function taskFormHandler(event) { 
   event.preventDefault(); 
   var taskNameInput = document.querySelector("input[name='task-name']").value;
@@ -13,13 +15,29 @@ function taskFormHandler(event) {
     alert("You need to fill out the task form!")
     return false;
   }
-  let taskDataObject ={
-    name: taskNameInput,
-    type: taskTypeInput
+  var isEdit = formElement.hasAttribute("data-task-id");
+  console.log(isEdit);
+
+  // has data attribute, so get task id and call function to complete edit process
+  if (isEdit) {
+    var taskId = formElement.getAttribute("data-task-id");
+    completeEditTask(taskNameInput, taskTypeInput, taskId);
+  } 
+  // no data attribute, so create object as normal and pass to createTaskEl function
+  else {
+    var taskDataObject = {
+      name: taskNameInput,
+      type: taskTypeInput
+    };
+
+    createTaskElement(taskDataObject);
   }
-  createTaskElement(taskDataObject);
   formElement.reset();
-  }; 
+  };
+    //__________________________________________ Create Task Event Handler __________________________________________ 
+
+//__________________________________________ Create Task HTML Generator Function __________________________________________
+// Creates the HTML Element for any newly created task item <li></li> and appends to the unordered list <ul></ul>
   function createTaskElement(taskDataObject){
     // create a li element for the unordered list
     var listItemElement = document.createElement("li");
@@ -44,7 +62,10 @@ function taskFormHandler(event) {
       // increase task counter for next unique id
       taskIdCounter++; 
   }
+//__________________________________________ Create Task HTML Generator Function __________________________________________
 
+//__________________________________________ Edit/Delete/Select Progress HTML Generator function __________________________________________
+// Creates the HTML Element Edit/Delete/Select Progress and appends to the list item <li></li>
   function createTaskActions(taskId){
     var actionContainerEl = document.createElement('div');
     actionContainerEl.className = 'task-actions';
@@ -83,7 +104,11 @@ function taskFormHandler(event) {
 
     return actionContainerEl;
   }
+//__________________________________________ Edit/Delete/Select Progress HTML Generator function __________________________________________
 
+
+//__________________________________________ Edit/Delete/Select Progress Task Handler Function __________________________________________
+// Event Handler for both edit and delete functions. Searches parent Element for the mouse click events for Edit and Delete functions
   var taskButtonHandler = function(event) {
       // get target element from event
     var targetEl = event.target;
@@ -98,11 +123,17 @@ function taskFormHandler(event) {
     
 
   };
+//__________________________________________ Edit/Delete/Select Progress Task Handler Function __________________________________________
 
+//__________________________________________ Delete Task Handler Function __________________________________________
+// Function dedicated to removing a selected task HTML element by using the unique (data-task-id) as a selector
   var deleteTask = function(taskId){
     var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
     taskSelected.remove();
   };
+
+//__________________________________________ Edit Task Handler Function __________________________________________
+// Function dedicated to Editing a selected task HTML element by using the unique (data-task-id) as a selector
   var editTask = function(taskId){
     var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
     
@@ -111,8 +142,49 @@ function taskFormHandler(event) {
     var taskType = taskSelected.querySelector("span.task-type").textContent;
     console.log(taskType);
     document.querySelector("#save-task").textContent = "Save Task";
-    formEl.setAttribute("data-task-id", taskId);
+    formElement.setAttribute("data-task-id", taskId);
   };
+//__________________________________________ Edit Task Handler Function __________________________________________
 
+//__________________________________________ Edit Task Function __________________________________________
+// This function handles the new data created by the user and updates the text information using the (data-task-id)
+  var completeEditTask = function(taskName, taskType, taskId) {
+    // find the matching task list item
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+
+    // set new values
+    taskSelected.querySelector("h3.task-name").textContent = taskName;
+    taskSelected.querySelector("span.task-type").textContent = taskType;
+
+    alert("Task Updated!");
+    formElement.removeAttribute("data-task-id");
+    document.querySelector("#save-task").textContent = "Add Task";
+  };
+//__________________________________________ Edit Task Function __________________________________________
+//__________________________________________ Event Handler Function for progress change dropdown menu__________________________________________
+// This function handles when the user selects an option from the progress dropdown menu
+  var taskStatusChangeHandler = function(event) {
+  // get the task item's id
+  var taskId = event.target.getAttribute("data-task-id");
+
+  // get the currently selected option's value and convert to lowercase
+  var statusValue = event.target.value.toLowerCase();
+
+  // find the parent task item element based on the id
+  var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+  if (statusValue === "to do") {
+    tasksToDoEl.appendChild(taskSelected);
+  } 
+  else if (statusValue === "in progress") {
+    tasksInProgressEl.appendChild(taskSelected);
+  } 
+  else if (statusValue === "completed") {
+    tasksCompletedEl.appendChild(taskSelected);
+  }
+  };
+//__________________________________________ Event Handler Function for progress change dropdown menu__________________________________________
+  //__________________________________________ Event Listener Function Calls __________________________________________
   formElement.addEventListener("submit", taskFormHandler);
   pageContentEl.addEventListener("click", taskButtonHandler);
+  pageContentEl.addEventListener("change", taskStatusChangeHandler);
+  //__________________________________________ Event Listener Function Calls __________________________________________
