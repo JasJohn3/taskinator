@@ -1,5 +1,6 @@
 var formElement = document.querySelector('#task-form');
 var tasksToDoElement = document.querySelector("#tasks-to-do");
+var pageContentEl = document.querySelector("#page-content");
 var taskIdCounter = 0;
 
 
@@ -82,4 +83,31 @@ function taskFormHandler(event) {
 
     return actionContainerEl;
   }
+
+  var taskButtonHandler = function(event) {
+    console.log(event.target);
+
+    if(event.target.matches(".delete-btn")){
+      // get the element's task id
+      var taskId = event.target.getAttribute("data-task-id");
+      deleteTask(taskId);
+    }
+    
+    if(event.target.matches(".edit-btn")){
+      alert('Edit Button Pressed!')
+      var taskId = event.target.getAttribute("data-task-id");
+      editTask(taskId);
+    }
+  };
+
+  var deleteTask = function(taskId){
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+    taskSelected.remove();
+  };
+  var editTask = function(taskId){
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+    console.log(taskSelected);
+  };
+
   formElement.addEventListener("submit", taskFormHandler);
+  pageContentEl.addEventListener("click", taskButtonHandler);
