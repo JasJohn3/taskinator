@@ -17,7 +17,7 @@ function taskFormHandler(event) {
     return false;
   }
   var isEdit = formElement.hasAttribute("data-task-id");
-  console.log(isEdit);
+  
 
   // has data attribute, so get task id and call function to complete edit process
   if (isEdit) {
@@ -64,7 +64,9 @@ function taskFormHandler(event) {
     taskDataObject.id = taskIdCounter;
     tasks.push(taskDataObject);
       // increase task counter for next unique id
-      taskIdCounter++; 
+    taskIdCounter++;
+    //save tasks to local storage
+    saveTasks();
   }
 //__________________________________________ Create Task HTML Generator Function __________________________________________
 
@@ -143,6 +145,7 @@ function taskFormHandler(event) {
       }
     }
     tasks = updateTaskArray;
+    saveTasks();
   };
 
 //__________________________________________ Edit Task Handler Function __________________________________________
@@ -150,10 +153,10 @@ function taskFormHandler(event) {
   var editTask = function(taskId){
     var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
     
-    var taskName = taskSelected.querySelector("h3.task-name").textContent;
-    console.log(taskName);
-    var taskType = taskSelected.querySelector("span.task-type").textContent;
-    console.log(taskType);
+    // var taskName = taskSelected.querySelector("h3.task-name").textContent;
+    // console.log(taskName);
+    // var taskType = taskSelected.querySelector("span.task-type").textContent;
+    // console.log(taskType);
     document.querySelector("#save-task").textContent = "Save Task";
     formElement.setAttribute("data-task-id", taskId);
   };
@@ -175,6 +178,7 @@ function taskFormHandler(event) {
         tasks[i].type = taskType;
       }
     }
+    saveTasks();
     alert("Task Updated!");
     formElement.removeAttribute("data-task-id");
     document.querySelector("#save-task").textContent = "Add Task";
@@ -206,9 +210,13 @@ function taskFormHandler(event) {
       tasks[i].status = statusValue;
     }
   }
-  console.log(tasks);
+  saveTasks();
   };
 //__________________________________________ Event Handler Function for progress change dropdown menu__________________________________________
+//__________________________________________ Save Tasks to local Storage Function__________________________________________
+  var saveTasks = function() {
+    localStorage.setItem("tasks",JSON.stringify(tasks));
+  }
   //__________________________________________ Event Listener Function Calls __________________________________________
   formElement.addEventListener("submit", taskFormHandler);
   pageContentEl.addEventListener("click", taskButtonHandler);
