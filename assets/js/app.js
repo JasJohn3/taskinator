@@ -4,6 +4,7 @@ var pageContentEl = document.querySelector("#page-content");
 var tasksInProgressEl = document.querySelector("#tasks-in-progress");
 var tasksCompletedEl = document.querySelector("#tasks-completed");
 var taskIdCounter = 0;
+var tasks = [];
 
   //__________________________________________ Create Task Event Handler __________________________________________
   // Function dedicated to the creation of a new task and ecapsulates user generated data
@@ -27,7 +28,8 @@ function taskFormHandler(event) {
   else {
     var taskDataObject = {
       name: taskNameInput,
-      type: taskTypeInput
+      type: taskTypeInput,
+      status: "to do"
     };
 
     createTaskElement(taskDataObject);
@@ -59,6 +61,8 @@ function taskFormHandler(event) {
     listItemElement.appendChild(taskActionsElement);
     // append the li to the ul element
     tasksToDoElement.appendChild(listItemElement);
+    taskDataObject.id = taskIdCounter;
+    tasks.push(taskDataObject);
       // increase task counter for next unique id
       taskIdCounter++; 
   }
@@ -130,6 +134,15 @@ function taskFormHandler(event) {
   var deleteTask = function(taskId){
     var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
     taskSelected.remove();
+    // create new array to hold updated list of tasks
+    var updateTaskArray = [];
+
+    for(i=0;i<tasks.length;i++){
+      if(tasks[i].id !== parseInt(taskId)){
+        updateTaskArray.push(tasks[i]);
+      }
+    }
+    tasks = updateTaskArray;
   };
 
 //__________________________________________ Edit Task Handler Function __________________________________________
@@ -155,7 +168,13 @@ function taskFormHandler(event) {
     // set new values
     taskSelected.querySelector("h3.task-name").textContent = taskName;
     taskSelected.querySelector("span.task-type").textContent = taskType;
-
+    // loop through tasks array and task object with new content
+    for(var i = 0; i <tasks.length; i++){
+      if (tasks[i].id === parseInt(taskId)) {
+        tasks[i].name = taskName;
+        tasks[i].type = taskType;
+      }
+    }
     alert("Task Updated!");
     formElement.removeAttribute("data-task-id");
     document.querySelector("#save-task").textContent = "Add Task";
@@ -173,7 +192,7 @@ function taskFormHandler(event) {
   // find the parent task item element based on the id
   var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
   if (statusValue === "to do") {
-    tasksToDoEl.appendChild(taskSelected);
+    tasksToDoElement.appendChild(taskSelected);
   } 
   else if (statusValue === "in progress") {
     tasksInProgressEl.appendChild(taskSelected);
@@ -181,6 +200,13 @@ function taskFormHandler(event) {
   else if (statusValue === "completed") {
     tasksCompletedEl.appendChild(taskSelected);
   }
+  // update task's in tasks array
+  for(var i = 0; i<tasks.length; i++){
+    if (tasks[i].id === parseInt(taskId)) {
+      tasks[i].status = statusValue;
+    }
+  }
+  console.log(tasks);
   };
 //__________________________________________ Event Handler Function for progress change dropdown menu__________________________________________
   //__________________________________________ Event Listener Function Calls __________________________________________
