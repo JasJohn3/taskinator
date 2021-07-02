@@ -217,6 +217,24 @@ function taskFormHandler(event) {
   var saveTasks = function() {
     localStorage.setItem("tasks",JSON.stringify(tasks));
   }
+//__________________________________________ Save Tasks to local Storage Function__________________________________________
+
+//__________________________________________ Load Tasks from local Storage Function__________________________________________
+  var loadTasks = function(){
+    tasks = localStorage.getItem("tasks");
+    if (tasks === null) {
+      tasks = [];
+    }
+    tasks = JSON.parse(tasks);
+    console.log(tasks);
+
+    for(i=0;i<tasks.length;i++){
+      console.log(tasks[i]);
+       taskIdCounter=tasks[i].id;
+       console.log(taskIdCounter);
+    }
+  }
+//__________________________________________ Load Tasks from local Storage Function__________________________________________
   //__________________________________________ Event Listener Function Calls __________________________________________
   formElement.addEventListener("submit", taskFormHandler);
   pageContentEl.addEventListener("click", taskButtonHandler);
