@@ -178,10 +178,10 @@ function taskFormHandler(event) {
         tasks[i].type = taskType;
       }
     }
-    saveTasks();
     alert("Task Updated!");
     formElement.removeAttribute("data-task-id");
     document.querySelector("#save-task").textContent = "Add Task";
+    saveTasks();
   };
 //__________________________________________ Edit Task Function __________________________________________
 //__________________________________________ Event Handler Function for progress change dropdown menu__________________________________________
