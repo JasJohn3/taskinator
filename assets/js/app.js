@@ -220,23 +220,28 @@ function taskFormHandler(event) {
 //__________________________________________ Save Tasks to local Storage Function__________________________________________
 
 //__________________________________________ Load Tasks from local Storage Function__________________________________________
-  var loadTasks = function(){
-    tasks = localStorage.getItem("tasks");
-    if (tasks === null) {
-      tasks = [];
-    }
-    tasks = JSON.parse(tasks);
-    console.log(tasks);
-
-    for(i=0;i<tasks.length;i++){
-      console.log(tasks[i]);
-       taskIdCounter=tasks[i].id;
-       console.log(taskIdCounter);
-    }
+var loadTasks = function() {
+  var savedTasks = localStorage.getItem("tasks");
+  // if there are no tasks, set tasks to an empty array and return out of the function
+  if (!savedTasks) {
+    return false;
   }
+  console.log("Saved tasks found!");
+  // else, load up saved tasks
+
+  // parse into array of objects
+  savedTasks = JSON.parse(savedTasks);
+
+  // loop through savedTasks array
+  for (var i = 0; i < savedTasks.length; i++) {
+    // pass each task object into the `createTaskEl()` function
+    createTaskElement(savedTasks[i]);
+  }
+};
 //__________________________________________ Load Tasks from local Storage Function__________________________________________
   //__________________________________________ Event Listener Function Calls __________________________________________
   formElement.addEventListener("submit", taskFormHandler);
   pageContentEl.addEventListener("click", taskButtonHandler);
   pageContentEl.addEventListener("change", taskStatusChangeHandler);
   //__________________________________________ Event Listener Function Calls __________________________________________
+  loadTasks();
